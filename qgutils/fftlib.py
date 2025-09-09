@@ -239,6 +239,9 @@ def get_spec_flux(psi1, psi2, Delta, window=None):
   for i in range(kr.size):
     kfilt =  (kr[i] <= K ) 
     flux[:,i] = (spec_2D[:,kfilt]).sum(axis=-1)*dk*dk
+    # next line is probably faster. check it is the same result
+    #flux[:,i] = (spec_2D*kfilt).sum(axis=(1,2))*dk*dk
+
   return kr, flux.squeeze()
 
 
