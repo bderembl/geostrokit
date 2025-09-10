@@ -1,7 +1,7 @@
 
-#+TITLE: QGutils readme
+#+TITLE: GeostroKit readme
 
-qgutils provides a couple of functions useful in the QG world and
+GeostroKit provides a couple of functions useful in the QG world and
 elsewhere.
 
 * Installation
@@ -17,7 +17,7 @@ pip install . --user
 
 #+begin_src python :results output
 import numpy as np
-import qgutils as qg
+import geostrokit as qg
 
 dh = np.array([500,2500]) # thickness of the layers 
 N2 = np.array([1e-5])
