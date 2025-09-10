@@ -1,4 +1,4 @@
 build/
 dist/
-qgutils.egg-info/
-qgutils/__pycache__/
+geostrokit.egg-info/
+geostrokit/__pycache__/
