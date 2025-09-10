@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import qgutils as qg
+import geostrokit as qg
 
 plt.ion()
 
