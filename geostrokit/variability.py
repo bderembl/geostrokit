@@ -119,3 +119,78 @@ def iterative_variance(it, psi_me, psi_var, psi):
   psi_var = (psi_var*(it-1) + delta*delta2)/it
 
   return psi_me, psi_var
+
+
+def iterative_covariance(it, psi1_me, psi2_me, psi_cov, psi1, psi2):
+  '''Update the running mean and covariance of a field using Welford's online algorithm.
+
+  This function is an elementary building block for computing the variance of a sequence 
+  of fields (e.g., arrays, tensors) in an iterative fashion. It is especially useful 
+  when loading or storing all data samples at once is expensive or impractical.
+
+  Based on:
+  https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm
+
+
+  Parameters
+  ----------
+ it : int
+      Iteration count (starting from 1). Represents the number of samples seen so far.
+
+  psi1_me : array-like
+      Running mean of the first variable (psi1)
+
+  psi2_me : array-like
+      Running mean of the second variable (psi2)
+
+  psi_cov : array-like
+      Current estimate of the covariance between psi1 and psi2. Should have the same shape 
+      as psi1 and psi2.
+
+  psi1 : array-like
+      New sample from the first variable.
+
+  psi2 : array-like
+      New sample from the second variable.
+
+  Returns
+  -------
+  psi1_me : array-like
+      Updated mean of psi1 after incorporating the new sample.
+
+  psi2_me : array-like
+      Updated mean of psi2 after incorporating the new sample.
+
+  psi_cov : array-like
+      Updated (biased) covariance between psi1 and psi2.
+
+
+  Notes
+  -----
+
+  The apparent asymmetry in that last equation is due to the fact that
+  (x_n-{\bar x}_n)=\frac {n-1}{n} (x_n-{\bar x}_{n-1}) (cf. wikipedia link)
+
+
+  Example
+  -------
+
+  >>> import numpy as np
+  >>> psi1 = [np.array([1.0]), np.array([2.0]), np.array([3.0])]
+  >>> psi2 = [np.array([1.0]), np.array([3.0]), np.array([8.0])]
+  >>> psi1_me = np.zeros_like(psi1[0])
+  >>> psi2_me = np.zeros_like(psi2[0])
+  >>> psi_cov = np.zeros_like(psi1[0])
+  >>> for i, (x, y) in enumerate(zip(psi1, psi2), 1):
+  ...     psi1_me, psi2_me, psi_cov = iterative_covariance(i, psi1_me, psi2_me, psi_cov, x, y)
+  >>> print("Covariance:", psi_cov)
+  Covariance: [2.33333333]
+
+  '''
+
+  delta = psi1 - psi1_me
+  psi1_me += delta/it
+  psi2_me += (psi2 - psi2_me)/it
+  psi_cov = (psi_cov*(it-1) + delta*(psi2 - psi2_me))/it
+
+  return psi1_me, psi2_me, psi_cov
