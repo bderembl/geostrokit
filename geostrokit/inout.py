@@ -66,21 +66,46 @@ def read_bas(fname):
 
 def read_nc(fname, it, var='p', rescale=1.0, interp=False, subtract_bc=False):
   """
-  Read netcdf format file
+  Read a variable from a NetCDF file, with optional rescaling, interpolation,
+  and boundary condition subtraction.
 
   Parameters
   ----------
-
-  fname: file name
-  it: int iteration number
-  var: str, variable name (optional)
-  rescale: float, multiply output by rescale factor
-  interp: Bool, interpolate on grid center (default: False) (changed default 7/12/22)
+  fname : str
+      Path to the NetCDF file to read.
+  
+  it : int
+      Time index (iteration) to read in the file.
+  
+  var : str, optional
+      Name of the variable to read from the NetCDF file. Default is 'p'.
+  
+  rescale : float, optional
+      Factor to multiply the output data by. Default is 1.0.
+  
+  interp : bool, optional
+      If True, interpolate the variable data from cell nodes to cell centers. Default is False.
+  
+  subtract_bc : bool, optional
+      If True, subtracts the value at the lower-left corner (first index of each dimension)
+      from the entire array (i.e., removes a baseline). Useful for removing constant boundary conditions.
+      Default is False.
 
   Returns
   -------
+  psi : ndarray
+      The extracted data array, typically 3D ([z, y, x]), possibly rescaled, 
+      interpolated, and/or baseline-subtracted.
 
-  psi : array [nz, ny,nx]
+  Notes
+  -----
+  - This function assumes the variable has a time dimension as its first axis.
+
+  Example
+  -------
+  >>> psi = read_nc('ocean_data.nc', it=0, var='temperature', rescale=0.001, interp=True)
+  >>> print(psi.shape)
+  (10, 49, 99)  # assuming original was (10, 50, 100) and interp reduces grid size by 1
   """
 
   f = netcdf_file(fname,'r')
@@ -100,20 +125,35 @@ def read_nc(fname, it, var='p', rescale=1.0, interp=False, subtract_bc=False):
 
 def write_nc(fname, var, timeDim = False):
   """
-  write netcdf format file
+  Write a NetCDF file from a dictionary of 2D or 3D NumPy arrays.
 
   Parameters
   ----------
-
-  fname: file name
-  it: int iteration number
-  var: dictionnary of variables. variables are typically 2d or 3d variables
-  timeDim: bool  add an extra time dimension (default = False)
+  fname : str
+      Name of the NetCDF file to create (including path if necessary).
+  
+  var : dict
+      Dictionary of variables to write to the file. Each value should be a NumPy array 
+      (2D or 3D). Keys will be used as variable names in the NetCDF file.
+  
+  timeDim : bool, optional
+      If True, adds an unlimited time dimension ('t') and writes variables 
+      as if they have a leading time axis. Default is False.
 
   Returns
   -------
+  None
+      The function writes the specified data to a NetCDF file and does not return any value.
 
-  Nothing
+  Example
+  -------
+  >>> import numpy as np
+  >>> import geostrokit as qg
+  >>> data = {
+  ...     'temperature': np.random.rand(10, 50, 100),  # 3D: z, y, x
+  ...     'salinity': np.random.rand(10, 50, 100)
+  ... }
+  >>> qg.write_nc('ocean_data.nc', data, timeDim=True)
   """
 
   f = netcdf_file(fname,'w')
