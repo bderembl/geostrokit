@@ -466,28 +466,28 @@ def FMG(num_levels,f, L0, Jacrelax, f_type, mask, Smat=1, nv=1,level=1):
 
 
 def find_level(nx):
-    """
-    Determines the level of division of a number by repeatedly halving it
-    until it is no longer divisible by 2.
+  """
+  Determines the level of division of a number by repeatedly halving it
+  until it is no longer divisible by 2.
 
-    The function starts with an integer `nx` and finds how many times it 
-    can be divided by 2 (i.e., how many times it can be halved) until the 
-    halved value is no longer equal to half of the original value. This 
-    process is repeated until no further division by 2 is possible.
+  The function starts with an integer `nx` and finds how many times it 
+  can be divided by 2 (i.e., how many times it can be halved) until the 
+  halved value is no longer equal to half of the original value. This 
+  process is repeated until no further division by 2 is possible.
 
-    Args:
-        nx (int): The integer to be repeatedly halved.
+  Args:
+      nx (int): The integer to be repeatedly halved.
 
-    Returns:
-        int: The level (number of times the integer can be halved by 2).
-    
-    Example:
-        >>> find_level(64)
-        6
-        
-        >>> find_level(100)
-        2
-    """
+  Returns:
+      int: The level (number of times the integer can be halved by 2).
+  
+  Example:
+      >>> find_level(64)
+      6
+      
+      >>> find_level(100)
+      2
+  """
   level = 0
   nx2 = int(nx/2)
   while 2*nx2 == nx:
