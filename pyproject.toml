@@ -9,7 +9,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "geostrokit"
 description = "A set of python scripts to handle QG outputs and more"
-version = "0.6.1"
+version = "0.7.1"
 dependencies = ['numpy', 'scipy' ]
 authors = [
   {name = "Bruno Deremble", email = "bruno.deremble@cnrs.fr"}
