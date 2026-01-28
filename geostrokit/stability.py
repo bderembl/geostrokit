@@ -26,7 +26,7 @@ def prepare_evp(k, l, S, dqbdy, dqbdx, U, V, nu=0, nu4=0, bf=0, sd=0, mat_format
   p2q = np.copy(S)
   p2q[di] -= k2
 
-  diag1 = np.array(k*dqbdy - l*dqbdx,dtype=np.complex)
+  diag1 = np.array(k*dqbdy - l*dqbdx,dtype=complex)
 #  diag1 = diag1 + 1j*(k2**2*nu + k2**3*nu4) # viscosity on momentum only
   diag1[-1] += 1j*k2*bf
 
@@ -40,7 +40,7 @@ def prepare_evp(k, l, S, dqbdy, dqbdx, U, V, nu=0, nu4=0, bf=0, sd=0, mat_format
     mat1[di] += diag1
     #  mat1[0,0:2] -= 1j*sd*S[0,0:2]
   else:
-    mat1 = np.zeros((3,nl),dtype=np.complex)
+    mat1 = np.zeros((3,nl),dtype=complex)
     mat1[0,1:]  = diag2[:-1]*p2q[0,1:]
     mat1[1,:]   = diag2*p2q[1,:] + diag1
     mat1[2,:-1] = diag2[1:]*p2q[2,:-1]
